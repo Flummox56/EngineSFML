@@ -5,18 +5,19 @@ namespace EngineSFML
 {
     class Program
     {
-        static internal Engine e = new Engine(0, 6000, 1000); // инициализация классов
-        static internal Picture p = new Picture(200);
+        static internal Engine eng = new Engine(0, 6000, 1000); // инициализация классов
+        static internal Picture pic = new Picture(200);
         static void Main(string[] args)
         {
-            Thread EngineThread = new Thread(e.updateEngine) {IsBackground = true}; // инициализация фоновых потоков
-            Picture p = new Picture(200);
+            Thread EngineThread = new Thread(eng.updateEngine) {IsBackground = true}; // инициализация фоновых потоков
+            Thread PictureThread = new Thread(pic.updatePicture) { IsBackground = true};
 
             EngineThread.Start(); // выброс задач в фоновые потоки
+            PictureThread.Start();
 
             //EngineThread.Join(-1); // затычка фоновых потоков
 
-            p.updatePicture();
+            pic.frameChange();
 
             //while (Console.ReadKey().Key != ConsoleKey.Escape) { }; // затычка главного потока
         }

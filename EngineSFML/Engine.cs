@@ -10,9 +10,10 @@ namespace EngineSFML
     {
         public double Rpm,
                       maxRpmPoint,
-                      idleRpmPoint,
-                      throttlePos = 0;
-                      //multiplicator;
+                      idleRpmPoint
+                      //throttlePos = 0;
+                      //multiplicator
+                      ;
         
         public bool woundUp,
                     accelPressed,
@@ -20,6 +21,7 @@ namespace EngineSFML
 
         public Engine(int rpm, int maxrpmpoint, int idlerpmpoint)
         {
+            woundUp = false;
             Rpm = rpm;
             maxRpmPoint = maxrpmpoint;
             idleRpmPoint = idlerpmpoint;
@@ -31,44 +33,44 @@ namespace EngineSFML
 
         public void updateStats(Object sender, System.Timers.ElapsedEventArgs e)
         {
-            Console.Write("хуй");
+            //Console.WriteLine("1");
 
-            /*if (woundUp)
+            if (woundUp)
             {
                 if (accelPressed)
                 {
-                    Rpm *= 1.1;
+                    if (Rpm < maxRpmPoint + 600)
+                    {
+                        Rpm += 100;
+                    }
+                    else
+                    {
+                        Rpm = maxRpmPoint;
+                    }
                 }
                 else
                 {
                     if (Rpm > idleRpmPoint)
                     {
-                        if (Rpm > idleRpmPoint + 500)
-                        {
-                            Rpm -= 400;
-                        }
-                        else
-                        {
-                            Rpm -= 200;
-                        }
+                        Rpm -= 150;
                     }
                     else
                     {
-                        Rpm += 100;
+                        Rpm = idleRpmPoint;
                     }
                 }
             }
             else
             {
-                if (Rpm > 500)
+                if (starterRotation == true)
                 {
-                    Rpm -= 500;
+                    Rpm += 50;
+                    if (Rpm >= idleRpmPoint)
+                    {
+                        woundUp = true;
+                    }
                 }
-                else
-                {
-                    Rpm = 0;
-                }
-            }*/
+            }
         }
 
         public void updateEngine()
@@ -76,7 +78,7 @@ namespace EngineSFML
             System.Timers.Timer t = new System.Timers.Timer()
             {
                 AutoReset = true,
-                Interval = 1000,
+                Interval = 10,
                 Enabled = true
             };
             t.Elapsed += updateStats;

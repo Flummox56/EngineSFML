@@ -2,6 +2,7 @@
 using SFML.System;
 using SFML.Graphics;
 using SFML.Window;
+using System.Timers;
 
 namespace EngineSFML
 {
@@ -30,12 +31,22 @@ namespace EngineSFML
             FillColor = new Color(Color.Black)
         };
 
+        RectangleShape pointer = new RectangleShape()
+        {
+            Size = new Vector2f(3, 135),
+            //Position = Program.pic.c.Position,
+            Rotation = 90,
+            FillColor = new Color(Color.Red),
+            OutlineThickness = 2,
+            OutlineColor = new Color(Color.Red)
+        };
+
         public Picture(uint maxFPS)
         {
             rw.SetFramerateLimit(maxFPS);
         }
         
-        public void updatePicture()
+        public void frameChange()
         {
             while (rw.IsOpen)
             {
@@ -55,10 +66,59 @@ namespace EngineSFML
 
         public void frameRedraw()
         {
-            r.Position = new Vector2f((rw.Size.X / 4) - (r.Size.X / 2), (rw.Size.Y / 2) - (r.Size.Y / 2));
+            r.Position = new Vector2f(
+                (rw.Size.X / 4) - (r.Size.X / 2), 
+                (rw.Size.Y / 2) - (r.Size.Y / 2)
+                );
             rw.Draw(r);
-            c.Position = new Vector2f((rw.Size.X / 4 * 3) - c.Radius, (rw.Size.Y / 2) - c.Radius);
+
+            c.Position = new Vector2f(
+                (rw.Size.X / 4 * 3) - c.Radius,
+                (rw.Size.Y / 2) - c.Radius
+                );
             rw.Draw(c);
+
+            pointer.Position = new Vector2f(
+                c.Position.X + c.Radius, 
+                c.Position.Y + c.Radius
+                );
+            rw.Draw(pointer);
+        }
+
+        public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //Console.WriteLine("2");
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) 
+            {
+                Program.eng.accelPressed = true;
+            }
+            else
+            {
+                Program.eng.accelPressed = false;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.RShift))
+            {
+                Program.eng.starterRotation = true;
+            }
+            else
+            {
+                Program.eng.starterRotation = false;
+            }
+            
+            pointer.Rotation = (90 + (float)Program.eng.Rpm / 33.3f);
+        }
+
+        public void updatePicture()
+        {
+            System.Timers.Timer t2 = new System.Timers.Timer()
+            {
+                AutoReset = true,
+                Interval = 10,
+                Enabled = true
+            };
+            t2.Elapsed += updateShapes;
         }
     }
 }
