@@ -9,6 +9,7 @@ namespace EngineSFML
     public class Picture
     {
         public static VideoMode vm = new VideoMode(1000, 500);
+
         public static RenderWindow rw = new RenderWindow(vm, "It works!")
         {
             Position = new Vector2i(),
@@ -17,7 +18,7 @@ namespace EngineSFML
 
         RectangleShape r = new RectangleShape()
         {
-            Size = new Vector2f(200,400),
+            Size = new Vector2f(200, 400),
             OutlineThickness = 5,
             FillColor = new Color(Color.Black),
             OutlineColor = new Color(Color.White)
@@ -41,11 +42,36 @@ namespace EngineSFML
             OutlineColor = new Color(Color.Red)
         };
 
+        List<Sprite> pistonSprites = new List<Sprite>();
+
+        Sprite sprite = new Sprite()
+        {
+            Scale = new Vector2f(200, 400)
+        };
+
         public Picture(uint maxFPS)
         {
             rw.SetFramerateLimit(maxFPS);
         }
-        
+
+        public void makeSprites()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Texture t = new Texture(
+                    "piston_image.jpg",
+                    new IntRect(
+                        new Vector2i(250 * i, 0),
+                        new Vector2i(250, 442)
+                        )
+                    );
+
+                Sprite sp = new Sprite(t);
+
+                pistonSprites.Add(sp);
+            }
+        }
+
         public void frameChange()
         {
             while (rw.IsOpen)
@@ -83,6 +109,9 @@ namespace EngineSFML
                 c.Position.Y + c.Radius
                 );
             rw.Draw(pointer);
+
+            sprite.Position = r.Position;
+            rw.Draw(sprite);
         }
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
@@ -107,7 +136,7 @@ namespace EngineSFML
                 Program.eng.starterRotation = false;
             }
             
-            pointer.Rotation = (90 + (float)Program.eng.Rpm / 33.3f);
+            pointer.Rotation = (45 + (float)Program.eng.Rpm / 33.3f);
         }
 
         public void updatePicture()
@@ -119,6 +148,42 @@ namespace EngineSFML
                 Enabled = true
             };
             t2.Elapsed += updateShapes;
+        }
+
+        public void updatePiston()
+        {
+            System.Timers.Timer t3 = new System.Timers.Timer()
+            {
+                AutoReset = true,
+                Interval = 1,
+                Enabled = true
+            };
+            t3.Elapsed += updateSprite;
+        }
+
+        int spriteNum = 0;
+
+        public void updateSprite(Object sender, System.Timers.ElapsedEventArgs args)
+        {
+
+            if (Program.eng.Rpm == 0)
+            {
+                Thread.Sleep(1);
+            }
+            else
+            {
+                Thread.Sleep((int)(1000 / (Program.eng.Rpm * 2 / 60)));
+                if (spriteNum < 3)
+                {
+                    spriteNum++;
+                }
+                else
+                {
+                    spriteNum = 0;
+                }
+            }
+
+            sprite = pistonSprites[spriteNum];
         }
     }
 }

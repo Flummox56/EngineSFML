@@ -52,7 +52,7 @@ namespace EngineSFML
                 {
                     if (Rpm > idleRpmPoint)
                     {
-                        Rpm -= 150;
+                        Rpm -= 250;
                     }
                     else
                     {
@@ -68,6 +68,17 @@ namespace EngineSFML
                     if (Rpm >= idleRpmPoint)
                     {
                         woundUp = true;
+                    }
+                }
+                else
+                {
+                    if (Rpm > 50)
+                    {
+                        Rpm -= 50;
+                    }
+                    else
+                    {
+                        Rpm = 0;
                     }
                 }
             }
