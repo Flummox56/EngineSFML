@@ -6,7 +6,7 @@ namespace EngineSFML
     class Program
     {
         static internal Engine eng = new Engine(0, 8000, 1000); // инициализация классов
-        static internal Picture pic = new Picture(1000);
+        static internal Picture pic = new Picture(200);
         static void Main(string[] args)
         {
             pic.makeSprites();
