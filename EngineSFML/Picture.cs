@@ -42,6 +42,9 @@ namespace EngineSFML
             OutlineColor = new Color(Color.Red)
         };
 
+        Text t = new Text($"{wait}", new Font("arial.ttf"), 30);
+
+
         List<Sprite> pistonSprites = new List<Sprite>();
 
         Sprite sprite = new Sprite()
@@ -58,13 +61,14 @@ namespace EngineSFML
         {
             for (int i = 0; i < 4; i++)
             {
-                Texture t = new Texture(
-                    "piston_image.jpg",
-                    new IntRect(
-                        new Vector2i(250 * i, 0),
-                        new Vector2i(250, 442)
-                        )
-                    );
+                Vector2i[] PoseVectMas = {new Vector2i(80, 10), new Vector2i(359, 10), new Vector2i(637, 10), new Vector2i(915, 10)};
+                Vector2i[] SizeVectMas = {new Vector2i(200, 400), new Vector2i(200, 400), new Vector2i(200, 400), new Vector2i(200, 400)};
+
+                IntRect ir = new IntRect(PoseVectMas[i], SizeVectMas[i]);
+
+                Texture t = new Texture("231221632.png", ir);
+
+                t.Smooth = true;
 
                 Sprite sp = new Sprite(t);
 
@@ -112,6 +116,9 @@ namespace EngineSFML
 
             sprite.Position = r.Position;
             rw.Draw(sprite);
+
+            t.Position = new Vector2f(500, 450);
+            rw.Draw(t);
         }
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
@@ -162,17 +169,19 @@ namespace EngineSFML
         }
 
         int spriteNum = 0;
+        static double wait;
 
         public void updateSprite(Object sender, System.Timers.ElapsedEventArgs args)
         {
-
+            
             if (Program.eng.Rpm == 0)
             {
                 Thread.Sleep(1);
             }
             else
             {
-                Thread.Sleep((int)(1000 / (Program.eng.Rpm * 2 / 60)));
+                wait = (1000 / (Program.eng.Rpm * 2 / 60));
+                Thread.Sleep((int)wait);
                 if (spriteNum < 3)
                 {
                     spriteNum++;
