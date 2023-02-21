@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ABI.Windows.Foundation;
+using SFML.System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,14 +12,30 @@ namespace EngineSFML
     {
         public double Rpm,
                       maxRpmPoint,
-                      idleRpmPoint
-                      //throttlePos = 0;
-                      //multiplicator
-                      ;
+                      idleRpmPoint,
+                      power,
+                      torque;
         
         public bool woundUp,
                     accelPressed,
                     starterRotation;
+
+        Vector2f[] PowerGraphPoints = 
+        {
+            new Vector2f(1000, 20), 
+            new Vector2f(1500, 60), 
+            new Vector2f(4500, 180), 
+            new Vector2f(6000, 180), 
+            new Vector2f(7000, 170)
+        };
+
+        Vector2f[] TorqueGraphPoints =
+{
+            new Vector2f(1000, 200),
+            new Vector2f(1500, 360),
+            new Vector2f(4500, 360),
+            new Vector2f(6500, 260)
+        };
 
         public Engine(int rpm, int maxrpmpoint, int idlerpmpoint)
         {
@@ -26,15 +44,16 @@ namespace EngineSFML
             maxRpmPoint = maxrpmpoint;
             idleRpmPoint = idlerpmpoint;
         }
-        public void useStarter()
+
+
+
+        public void updateStats()
         {
             
         }
 
-        public void updateStats(Object sender, System.Timers.ElapsedEventArgs e)
+        public void updateRpm(Object sender, System.Timers.ElapsedEventArgs e)
         {
-            //Console.WriteLine("1");
-
             if (woundUp)
             {
                 if (accelPressed)
@@ -82,6 +101,8 @@ namespace EngineSFML
                     }
                 }
             }
+
+            updateStats();
         }
 
         public void updateEngine()
@@ -92,7 +113,7 @@ namespace EngineSFML
                 Interval = 10,
                 Enabled = true
             };
-            t.Elapsed += updateStats;
+            t.Elapsed += updateRpm;
             Thread.Sleep(-1);
         }
     }

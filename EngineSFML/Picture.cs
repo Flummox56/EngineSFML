@@ -8,54 +8,33 @@ namespace EngineSFML
 {
     public class Picture
     {
-        public static VideoMode vm = new VideoMode(1000, 500);
+        public static VideoMode vm = new VideoMode(1000, 500, 16);
 
-        public static RenderWindow rw = new RenderWindow(vm, "It works!")
-        {
-            Position = new Vector2i(),
-            Size = new Vector2u(1000, 500)
-        };
+        int spriteNum = 0;
+        Text t = new Text("a", new Font("arial.ttf"), 30);
 
-        RectangleShape r = new RectangleShape()
-        {
-            Size = new Vector2f(200, 400),
-            OutlineThickness = 5,
-            FillColor = new Color(Color.Black),
-            OutlineColor = new Color(Color.White)
-        };
-
-        CircleShape c = new CircleShape()
-        {
-            Radius = 135,
-            OutlineColor = new Color(Color.White),
-            OutlineThickness = 5,
-            FillColor = new Color(Color.Black)
-        };
-
-        RectangleShape pointer = new RectangleShape()
-        {
-            Size = new Vector2f(3, 135),
-            //Position = Program.pic.c.Position,
-            Rotation = 90,
-            FillColor = new Color(Color.Red),
-            OutlineThickness = 2,
-            OutlineColor = new Color(Color.Red)
-        };
-
-        Text t = new Text($"{wait}", new Font("arial.ttf"), 30);
-
+        Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
+        Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 70);
+        Meter TorqueMeter = new Meter(new Vector2f(875, 375), 85, "Torque", 150);
 
         List<Sprite> pistonSprites = new List<Sprite>();
-
-        Sprite sprite = new Sprite()
-        {
-            Scale = new Vector2f(200, 400)
-        };
 
         public Picture(uint maxFPS)
         {
             rw.SetFramerateLimit(maxFPS);
         }
+
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.2.0 тест")
+        {
+            Position = new Vector2i(3000, 0),
+            Size = new Vector2u(1000, 500)
+        };
+
+        Sprite sprite = new Sprite()
+        {
+            Scale = new Vector2f(200, 400),
+            Position = new Vector2f(50, 50)
+        };
 
         public void makeSprites()
         {
@@ -96,35 +75,15 @@ namespace EngineSFML
 
         public void frameRedraw()
         {
-            r.Position = new Vector2f(
-                (rw.Size.X / 4) - (r.Size.X / 2), 
-                (rw.Size.Y / 2) - (r.Size.Y / 2)
-                );
-            rw.Draw(r);
-
-            c.Position = new Vector2f(
-                (rw.Size.X / 4 * 3) - c.Radius,
-                (rw.Size.Y / 2) - c.Radius
-                );
-            rw.Draw(c);
-
-            pointer.Position = new Vector2f(
-                c.Position.X + c.Radius, 
-                c.Position.Y + c.Radius
-                );
-            rw.Draw(pointer);
-
-            sprite.Position = r.Position;
             rw.Draw(sprite);
 
-            t.Position = new Vector2f(500, 450);
-            rw.Draw(t);
-        }
+            RpmMeter.paint(rw);
+            PowerMeter.paint(rw);
+            TorqueMeter.paint(rw);
+        }   
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
         {
-            //Console.WriteLine("2");
-
             if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) 
             {
                 Program.eng.accelPressed = true;
@@ -142,8 +101,15 @@ namespace EngineSFML
             {
                 Program.eng.starterRotation = false;
             }
+
+            t.Position = new Vector2f(500, 400);
+            t.DisplayedString = "Rpm\n" + Program.eng.Rpm;
+
+            RpmMeter.update(Program.eng.Rpm);
+            PowerMeter.update(Program.eng.power);
+            TorqueMeter.update(Program.eng.torque);
             
-            pointer.Rotation = (45 + (float)Program.eng.Rpm / 33.3f);
+            this.updateSprite();
         }
 
         public void updatePicture()
@@ -154,34 +120,19 @@ namespace EngineSFML
                 Interval = 10,
                 Enabled = true
             };
-            t2.Elapsed += updateShapes;
+            t2.Elapsed += this.updateShapes;
         }
 
-        public void updatePiston()
+        public void updateSprite()
         {
-            System.Timers.Timer t3 = new System.Timers.Timer()
-            {
-                AutoReset = true,
-                Interval = 1,
-                Enabled = true
-            };
-            t3.Elapsed += updateSprite;
-        }
-
-        int spriteNum = 0;
-        static double wait;
-
-        public void updateSprite(Object sender, System.Timers.ElapsedEventArgs args)
-        {
-            
             if (Program.eng.Rpm == 0)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(100);
             }
             else
             {
-                wait = (1000 / (Program.eng.Rpm * 2 / 60));
-                Thread.Sleep((int)wait);
+                double wait = (1000 / (Program.eng.Rpm * 2));
+                Thread.Sleep((int)(wait));
                 if (spriteNum < 3)
                 {
                     spriteNum++;

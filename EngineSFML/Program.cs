@@ -5,19 +5,18 @@ namespace EngineSFML
 {
     class Program
     {
-        static internal Engine eng = new Engine(0, 8000, 1000); // инициализация классов
+        static internal Engine eng = new Engine(0, 6000, 1000); // инициализация классов
         static internal Picture pic = new Picture(200);
+
+        public static Thread EngineThread = new Thread(eng.updateEngine) {IsBackground = true}; //инициализация фоновых потоков
+        public static Thread PictureThread = new Thread(pic.updatePicture) {IsBackground = true};
+
         static void Main(string[] args)
         {
             pic.makeSprites();
 
-            Thread EngineThread = new Thread(eng.updateEngine) {IsBackground = true}; // инициализация фоновых потоков
-            Thread PictureThread = new Thread(pic.updatePicture) {IsBackground = true};
-            Thread SpriteThread = new Thread(pic.updatePiston) {IsBackground = true};
-
             EngineThread.Start(); // выброс задач в фоновые потоки
             PictureThread.Start();
-            SpriteThread.Start();
 
             //EngineThread.Join(-1); // затычка фоновых потоков
 
