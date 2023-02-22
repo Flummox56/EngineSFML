@@ -19,21 +19,28 @@ namespace EngineSFML
         {
             construct(position, radius);
 
-            divValue = maxValue / 270;
+            divValue = maxValue / 300;
             title = name;
         }
 
-        public CircleShape c = new CircleShape()
+        CircleShape c = new CircleShape()
         {
             OutlineColor = new Color(Color.White),
             OutlineThickness = 5,
             FillColor = new Color(Color.Black)
         };
 
-        public RectangleShape pointer = new RectangleShape()
+        CircleShape c2 = new CircleShape()
+        {
+            OutlineColor = new Color(Color.White),
+            OutlineThickness = 5,
+            FillColor = new Color(Color.Black)
+        };
+
+        RectangleShape pointer = new RectangleShape()
         {
             Size = new Vector2f(2, 3),
-            Rotation = 90,
+            Rotation = 30,
             FillColor = new Color(Color.Red),
             OutlineThickness = 2,
             OutlineColor = new Color(Color.Red)
@@ -44,6 +51,9 @@ namespace EngineSFML
             c.Position = new Vector2f(position.X - radius, position.Y - radius);
             c.Radius = radius;
 
+            c2.Radius = radius / 2 + c2.OutlineThickness;
+            c2.Position = new Vector2f(position.X - c2.Radius, position.Y - c2.Radius);
+
             pointer.Size = new Vector2f(pointer.Size.X, radius);
             pointer.Position = c.Position + new Vector2f(radius, radius);
             pointer.Rotation = 45;
@@ -51,20 +61,22 @@ namespace EngineSFML
 
         internal void update(double currValue)
         {
-            pointer.Rotation = (45 + (float)currValue / divValue);
+            pointer.Rotation = (35 + (float)currValue / divValue);
 
             int integerValue = (int)currValue;
-            t.DisplayedString = title + " \n" + integerValue.ToString();
+            t.DisplayedString = title + "\n" + integerValue.ToString();
 
             t.Position = new Vector2f(
-                        pointer.Position.X - (t.CharacterSize * (float)(this.title.Length / 2)),
-                        pointer.Position.Y + t.CharacterSize);
+                        pointer.Position.X - ((float)(t.DisplayedString.Length / 4) * t.CharacterSize),
+                        pointer.Position.Y - t.CharacterSize
+            );
         }
 
-        public void paint(RenderWindow r)
+        internal void paint(RenderWindow r)
         {
             r.Draw(c);
             r.Draw(pointer);
+            r.Draw(c2);
             r.Draw(t);
         }
     }

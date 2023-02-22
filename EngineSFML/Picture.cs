@@ -14,8 +14,8 @@ namespace EngineSFML
         Text t = new Text("a", new Font("arial.ttf"), 30);
 
         Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
-        Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 70);
-        Meter TorqueMeter = new Meter(new Vector2f(875, 375), 85, "Torque", 150);
+        Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
+        Meter TorqueMeter = new Meter(new Vector2f(875, 375), 85, "Torque", 400);
 
         List<Sprite> pistonSprites = new List<Sprite>();
 
@@ -24,7 +24,7 @@ namespace EngineSFML
             rw.SetFramerateLimit(maxFPS);
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.2.0 тест")
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.2.1 тест")
         {
             Position = new Vector2i(3000, 0),
             Size = new Vector2u(1000, 500)
