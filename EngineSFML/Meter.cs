@@ -56,7 +56,7 @@ namespace EngineSFML
 
             pointer.Size = new Vector2f(pointer.Size.X, radius);
             pointer.Position = c.Position + new Vector2f(radius, radius);
-            pointer.Rotation = 45;
+            pointer.Rotation = 35;
         }
 
         internal void update(double currValue)
