@@ -26,7 +26,7 @@ namespace EngineSFML
             rw.SetFramerateLimit(maxFPS);
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.3.0 тест")
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.3.0 тест", Styles.Default)
         {
             Position = new Vector2i(3000, 0),
             Size = new Vector2u(1000, 500)

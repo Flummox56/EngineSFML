@@ -22,14 +22,16 @@ namespace EngineSFML
             OutlineThickness = 5,
         };
 
-        RectangleShape PistonRod = new RectangleShape()
+        RectangleShape pistonRod = new RectangleShape()
         {
-            
+            FillColor = new Color(Color.Black),
+            OutlineColor = new Color(Color.White),
+            OutlineThickness = 5,
         };
 
-        public CircleShape Cranc = new CircleShape()
+        CircleShape Cranc = new CircleShape()
         {
-            Radius = 25,
+            Radius = 20,
             OutlineColor = new Color(Color.White),
             OutlineThickness = 5,
             FillColor = new Color(Color.Black),
@@ -44,11 +46,14 @@ namespace EngineSFML
                 Cranc.Position.X - piston.Size.X / 4,
                 Cranc.Position.Y - 150
                 );
+
+            pistonRod.Size = new Vector2f(20, 150);
+            pistonRod.Origin = new Vector2f(10, 0);
         }
 
         public void update(double rpm)
         {
-            a = (rpm * 360) / 6000 / 100;
+            a = (rpm * 360) / 6000 / 1000;
 
             Cranc.Position = new Vector2f(
                 CenterPosition.X - Cranc.Radius + (float)(45 * Math.Cos(t)),
@@ -65,13 +70,22 @@ namespace EngineSFML
             }
 
             piston.Position = new Vector2f(
-                CenterPosition.X - (piston.Size.X + piston.OutlineThickness * 2) / 2,
+                CenterPosition.X - (piston.Size.X) / 2,
                 Cranc.Position.Y - 150
-    );
+                );
+
+            pistonRod.Position = new Vector2f(piston.Position.X + piston.Size.X / 2, piston.Position.Y + piston.Size.Y / 2);
+
+            double ac = (Cranc.Position.Y + Cranc.Radius) - pistonRod.Position.Y;
+            double bc = (Cranc.Position.X + Cranc.Radius) - pistonRod.Position.X;
+            double d = bc / ac;
+
+            pistonRod.Rotation = -(float)(Math.Atan(d) * 57.3);
         }
 
         public void paint(RenderWindow r)
         {
+            r.Draw(pistonRod);
             r.Draw(Cranc);
             r.Draw(piston);
         }
