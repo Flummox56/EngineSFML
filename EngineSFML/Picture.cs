@@ -14,6 +14,7 @@ namespace EngineSFML
         Text t = new Text("a", new Font("arial.ttf"), 30);
 
         Piston p = new Piston();
+        Indicator WoundUpIndicator = new Indicator(new Vector2f(625, 187.5f), "Wound Up");
 
         Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
         Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
@@ -26,9 +27,9 @@ namespace EngineSFML
             rw.SetFramerateLimit(maxFPS);
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.3.0 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.0 тест", Styles.Default)
         {
-            Position = new Vector2i(3000, 0),
+            Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
         };
 
@@ -84,6 +85,7 @@ namespace EngineSFML
             TorqueMeter.paint(rw);
 
             p.paint(rw);
+            WoundUpIndicator.paint(rw);
         }   
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
@@ -114,6 +116,7 @@ namespace EngineSFML
             TorqueMeter.update(Program.eng.torque);
 
             p.update(Program.eng.Rpm);
+            WoundUpIndicator.update(Program.eng.woundUp);
             
             updateSprite();
         }

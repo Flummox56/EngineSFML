@@ -64,9 +64,9 @@ namespace EngineSFML
             pointer.Rotation = (35 + (float)currValue / divValue);
 
             int integerValue = (int)currValue;
-            t.DisplayedString = title + "\n" + integerValue.ToString();
+            this.t.DisplayedString = title + "\n" + integerValue.ToString();
 
-            t.Position = new Vector2f(
+            this.t.Position = new Vector2f(
                         pointer.Position.X - ((float)(t.DisplayedString.Length / 4) * t.CharacterSize),
                         pointer.Position.Y - t.CharacterSize
             );

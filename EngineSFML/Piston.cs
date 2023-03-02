@@ -17,7 +17,7 @@ namespace EngineSFML
 
         RectangleShape piston = new RectangleShape()
         {
-            FillColor = new Color(Color.Black),
+            FillColor = new Color(Color.White),
             OutlineColor = new Color(Color.White),
             OutlineThickness = 5,
         };
@@ -41,7 +41,7 @@ namespace EngineSFML
         {
             Cranc.Position = new Vector2f(250 - Cranc.Radius, 375 - Cranc.Radius);
 
-            piston.Size = new Vector2f(130, 30);
+            piston.Size = new Vector2f(120, 50);
             piston.Position = new Vector2f(
                 Cranc.Position.X - piston.Size.X / 4,
                 Cranc.Position.Y - 150
@@ -53,7 +53,7 @@ namespace EngineSFML
 
         public void update(double rpm)
         {
-            a = (rpm * 360) / 6000 / 1000;
+            a = (rpm * 360) / 6000 / 100;
 
             Cranc.Position = new Vector2f(
                 CenterPosition.X - Cranc.Radius + (float)(45 * Math.Cos(t)),
