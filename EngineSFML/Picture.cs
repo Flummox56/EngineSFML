@@ -16,6 +16,7 @@ namespace EngineSFML
 
         Indicator WoundUpIndicator = new Indicator(new Vector2f(625, 187.5f), "Wound Up");
         Indicator IgnitionIndicator = new Indicator(new Vector2f(562.5f, 62.5f), "Ignition");
+        Indicator SlowModeIndicator = new Indicator(new Vector2f(687.5f, 62.5f), "Slow Mode");
 
         Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
         Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
@@ -28,7 +29,7 @@ namespace EngineSFML
             rw.SetFramerateLimit(maxFPS);
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.1 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.2 тест", Styles.Default)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
@@ -89,10 +90,14 @@ namespace EngineSFML
 
             WoundUpIndicator.paint(rw);
             IgnitionIndicator.paint(rw);
+            SlowModeIndicator.paint(rw);
         }
 
-        bool clicked = false;
-        int tickCount = 0;
+        bool clicked = false,
+             clicked2 = false;
+        
+        int tickCount = 0,
+            tickCount2 = 0;
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
         {
@@ -136,6 +141,28 @@ namespace EngineSFML
                 }
             }
 
+            if (Keyboard.IsKeyPressed(Keyboard.Key.RControl))
+            {
+                if (!clicked2)
+                {
+                    Program.eng.slowMode = !Program.eng.slowMode;
+                    clicked2 = true;
+                }
+            }
+
+            if (clicked2)
+            {
+                if (tickCount2 == 10)
+                {
+                    tickCount2 = 0;
+                    clicked2 = false;
+                }
+                else
+                {
+                    tickCount2++;
+                }
+            }
+
             t.Position = new Vector2f(500, 400);
             t.DisplayedString = "Rpm\n" + Program.eng.Rpm;
 
@@ -147,6 +174,7 @@ namespace EngineSFML
 
             WoundUpIndicator.update(Program.eng.woundUp);
             IgnitionIndicator.update(Program.eng.ignition);
+            SlowModeIndicator.update(Program.eng.slowMode);
             
             //updateSprite();
         }

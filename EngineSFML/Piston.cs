@@ -53,7 +53,7 @@ namespace EngineSFML
 
         public void update(double rpm)
         {
-            a = (rpm * 360) / 6000 / 100;
+            a = (rpm * 360) / 6000 / Program.eng.slowСoefficient;
 
             Cranc.Position = new Vector2f(
                 CenterPosition.X - Cranc.Radius + (float)(45 * Math.Cos(t)),

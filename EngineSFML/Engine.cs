@@ -14,12 +14,14 @@ namespace EngineSFML
                       maxRpmPoint,
                       idleRpmPoint,
                       power,
-                      torque;
+                      torque,
+                      slowСoefficient;
         
         public bool woundUp,
                     accelPressed,
                     starterRotation,
-                    ignition;
+                    ignition,
+                    slowMode;
 
         double[,] PowerCoeff = new double[4, 2] { { 0.08, -60 }, { 0.043, -3.5}, { 0, 190 }, { -0.04, 430 } };
 
@@ -32,6 +34,8 @@ namespace EngineSFML
             maxRpmPoint = maxrpmpoint;
             idleRpmPoint = idlerpmpoint;
             ignition = false;
+            slowMode = false;
+            slowСoefficient = 1;
         }
 
         public void updateStats()
@@ -61,6 +65,15 @@ namespace EngineSFML
                 power = PowerCoeff[3, 0] * Rpm + PowerCoeff[3, 1];
                 torque = TorqueCoeff[2, 0] * Rpm + TorqueCoeff[2, 1];
             }
+
+            if (slowMode)
+            {
+                slowСoefficient = 100;
+            }
+            else
+            {
+                slowСoefficient = 1;
+            }
         }
 
         public void updateRpm(Object sender, System.Timers.ElapsedEventArgs e)
@@ -73,7 +86,7 @@ namespace EngineSFML
                     {
                         if (Rpm < maxRpmPoint + 600)
                         {
-                            Rpm += 100;
+                            Rpm += 100 / slowСoefficient;
                         }
                         else
                         {
@@ -84,7 +97,7 @@ namespace EngineSFML
                     {
                         if (Rpm > idleRpmPoint)
                         {
-                            Rpm -= 250;
+                            Rpm -= 250 / slowСoefficient;
                         }
                         else
                         {
@@ -96,7 +109,7 @@ namespace EngineSFML
                 {
                     if (starterRotation == true)
                     {
-                        Rpm += 50;
+                        Rpm += 50 / slowСoefficient;
                         if (Rpm >= idleRpmPoint)
                         {
                             woundUp = true;
@@ -106,7 +119,7 @@ namespace EngineSFML
                     {
                         if (Rpm > 50)
                         {
-                            Rpm -= 50;
+                            Rpm -= 50 / slowСoefficient;
                         }
                         else
                         {
@@ -121,11 +134,11 @@ namespace EngineSFML
 
                 if (Rpm > 0)
                 {
-                    Rpm -= 250;
+                    Rpm -= 250 / slowСoefficient;
                 }
                 else
                 {
-                    Rpm = 0;
+                    Rpm = 0 / slowСoefficient;
                 }
             }
 
