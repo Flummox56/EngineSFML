@@ -18,7 +18,8 @@ namespace EngineSFML
         
         public bool woundUp,
                     accelPressed,
-                    starterRotation;
+                    starterRotation,
+                    ignition;
 
         double[,] PowerCoeff = new double[4, 2] { { 0.08, -60 }, { 0.043, -3.5}, { 0, 190 }, { -0.04, 430 } };
 
@@ -30,6 +31,7 @@ namespace EngineSFML
             Rpm = rpm;
             maxRpmPoint = maxrpmpoint;
             idleRpmPoint = idlerpmpoint;
+            ignition = false;
         }
 
         public void updateStats()
@@ -63,51 +65,67 @@ namespace EngineSFML
 
         public void updateRpm(Object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (woundUp)
+            if (ignition)
             {
-                if (accelPressed)
+                if (woundUp)
                 {
-                    if (Rpm < maxRpmPoint + 600)
+                    if (accelPressed)
                     {
-                        Rpm += 100;
+                        if (Rpm < maxRpmPoint + 600)
+                        {
+                            Rpm += 100;
+                        }
+                        else
+                        {
+                            Rpm = maxRpmPoint;
+                        }
                     }
                     else
                     {
-                        Rpm = maxRpmPoint;
+                        if (Rpm > idleRpmPoint)
+                        {
+                            Rpm -= 250;
+                        }
+                        else
+                        {
+                            Rpm = idleRpmPoint;
+                        }
                     }
                 }
                 else
                 {
-                    if (Rpm > idleRpmPoint)
+                    if (starterRotation == true)
                     {
-                        Rpm -= 250;
+                        Rpm += 50;
+                        if (Rpm >= idleRpmPoint)
+                        {
+                            woundUp = true;
+                        }
                     }
                     else
                     {
-                        Rpm = idleRpmPoint;
+                        if (Rpm > 50)
+                        {
+                            Rpm -= 50;
+                        }
+                        else
+                        {
+                            Rpm = 0;
+                        }
                     }
                 }
             }
             else
             {
-                if (starterRotation == true)
+                woundUp = false;
+
+                if (Rpm > 0)
                 {
-                    Rpm += 50;
-                    if (Rpm >= idleRpmPoint)
-                    {
-                        woundUp = true;
-                    }
+                    Rpm -= 250;
                 }
                 else
                 {
-                    if (Rpm > 50)
-                    {
-                        Rpm -= 50;
-                    }
-                    else
-                    {
-                        Rpm = 0;
-                    }
+                    Rpm = 0;
                 }
             }
 

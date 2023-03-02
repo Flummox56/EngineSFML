@@ -12,9 +12,10 @@ namespace EngineSFML
 
         int spriteNum = 0;
         Text t = new Text("a", new Font("arial.ttf"), 30);
-
         Piston p = new Piston();
+
         Indicator WoundUpIndicator = new Indicator(new Vector2f(625, 187.5f), "Wound Up");
+        Indicator IgnitionIndicator = new Indicator(new Vector2f(562.5f, 62.5f), "Ignition");
 
         Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
         Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
@@ -27,7 +28,7 @@ namespace EngineSFML
             rw.SetFramerateLimit(maxFPS);
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.0 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.1 тест", Styles.Default)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
@@ -85,8 +86,13 @@ namespace EngineSFML
             TorqueMeter.paint(rw);
 
             p.paint(rw);
+
             WoundUpIndicator.paint(rw);
-        }   
+            IgnitionIndicator.paint(rw);
+        }
+
+        bool clicked = false;
+        int tickCount = 0;
 
         public void updateShapes(Object sender, System.Timers.ElapsedEventArgs args)
         {
@@ -108,6 +114,28 @@ namespace EngineSFML
                 Program.eng.starterRotation = false;
             }
 
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            {
+                if (!clicked)
+                { 
+                    Program.eng.ignition = !Program.eng.ignition;
+                    clicked= true;
+                }
+            }
+
+            if (clicked) 
+            {
+                if (tickCount == 10)
+                {
+                    tickCount = 0;
+                    clicked = false;
+                }
+                else
+                {
+                    tickCount++;
+                }
+            }
+
             t.Position = new Vector2f(500, 400);
             t.DisplayedString = "Rpm\n" + Program.eng.Rpm;
 
@@ -116,9 +144,11 @@ namespace EngineSFML
             TorqueMeter.update(Program.eng.torque);
 
             p.update(Program.eng.Rpm);
+
             WoundUpIndicator.update(Program.eng.woundUp);
+            IgnitionIndicator.update(Program.eng.ignition);
             
-            updateSprite();
+            //updateSprite();
         }
 
         public void updatePicture()
