@@ -14,9 +14,10 @@ namespace EngineSFML
         Text t = new Text("a", new Font("arial.ttf"), 30);
         Piston p = new Piston();
 
-        Indicator WoundUpIndicator = new Indicator(new Vector2f(625, 187.5f), "Wound Up");
+        Indicator WoundUpIndicator = new Indicator(new Vector2f(562.5f, 187.5f), "Wound Up");
         Indicator IgnitionIndicator = new Indicator(new Vector2f(562.5f, 62.5f), "Ignition");
         Indicator SlowModeIndicator = new Indicator(new Vector2f(687.5f, 62.5f), "Slow Mode");
+        Indicator StarterIndicator = new Indicator(new Vector2f(687.5f, 187.5f), "Starter");
 
         Meter RpmMeter = new Meter(new Vector2f(875, 125), 85, "Rpm", 8000);
         Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
@@ -24,12 +25,22 @@ namespace EngineSFML
 
         List<Sprite> pistonSprites = new List<Sprite>();
 
+        Vertex[] Va = new Vertex[6];
+        
+
         public Picture(uint maxFPS)
         {
             rw.SetFramerateLimit(maxFPS);
+
+            Va[0] = new Vertex(new Vector2f(500, 0));
+            Va[1] = new Vertex(new Vector2f(500, 500));
+            Va[2] = new Vertex(new Vector2f(750, 0));
+            Va[3] = new Vertex(new Vector2f(750, 500));
+            Va[4] = new Vertex(new Vector2f(500, 250));
+            Va[5] = new Vertex(new Vector2f(1000, 250));
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.4.2 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.5.0 тест", Styles.Default)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
@@ -91,6 +102,9 @@ namespace EngineSFML
             WoundUpIndicator.paint(rw);
             IgnitionIndicator.paint(rw);
             SlowModeIndicator.paint(rw);
+            StarterIndicator.paint(rw);
+
+            rw.Draw(Va, PrimitiveType.Lines);
         }
 
         bool clicked = false,
@@ -112,7 +126,10 @@ namespace EngineSFML
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.RShift))
             {
-                Program.eng.starterRotation = true;
+                if (Program.eng.ignition)
+                {
+                    Program.eng.starterRotation = true;
+                }
             }
             else
             {
@@ -175,8 +192,11 @@ namespace EngineSFML
             WoundUpIndicator.update(Program.eng.woundUp);
             IgnitionIndicator.update(Program.eng.ignition);
             SlowModeIndicator.update(Program.eng.slowMode);
-            
+            StarterIndicator.update(Program.eng.starterRotation);
+
             //updateSprite();
+
+            
         }
 
         public void updatePicture()

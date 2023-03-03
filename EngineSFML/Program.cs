@@ -13,7 +13,7 @@ namespace EngineSFML
 
         static void Main(string[] args)
         {
-            pic.makeSprites();
+            //pic.makeSprites();
 
             EngineThread.Start(); // выброс задач в фоновые потоки
             PictureThread.Start();
