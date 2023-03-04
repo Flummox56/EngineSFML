@@ -40,7 +40,7 @@ namespace EngineSFML
             Va[5] = new Vertex(new Vector2f(1000, 250));
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.5.0 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.5.1 тест", Styles.Default)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)

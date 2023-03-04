@@ -19,6 +19,8 @@ namespace EngineSFML
         bool tactInput = true;
         bool tactOutput = false;
 
+        Vertex[] Cylinder = new Vertex[4];
+
         ConvexShape InletValve = new ConvexShape(6)
         {
             OutlineColor = new Color(Color.White),
@@ -86,7 +88,7 @@ namespace EngineSFML
                 );
 
             HotGas.Size = new Vector2f(piston.Size.X + 10, 1);
-            HotGas.Position = new Vector2f(piston.Position.X - 5, 166);
+            HotGas.Position = new Vector2f(piston.Position.X - 5, 170);
 
             Counterweight.Position = CenterPosition;
 
@@ -184,6 +186,11 @@ namespace EngineSFML
             double d = bc / ac;
 
             pistonRod.Rotation = -(float)(Math.Atan(d) * 57.3);
+
+            Cylinder[0] = new Vertex(new Vector2f(piston.Position.X - 5, 275));
+            Cylinder[1] = new Vertex(new Vector2f(piston.Position.X - 5, 170));
+            Cylinder[2] = new Vertex(new Vector2f(piston.Position.X + piston.Size.X + 5, 170));
+            Cylinder[3] = new Vertex(new Vector2f(piston.Position.X + piston.Size.X + 5, 275));
         }
 
         public void paint(RenderWindow r)
@@ -192,10 +199,11 @@ namespace EngineSFML
             r.Draw(pistonRod);
             r.Draw(Cranc);
             r.Draw(piston);
-            if (DrawGas)
+            if (DrawGas && Program.eng.woundUp)
             {
                 r.Draw(HotGas);
             }
+            r.Draw(Cylinder, PrimitiveType.LineStrip);
             r.Draw(InletValve);
             r.Draw(ExhaustValve);
         }
