@@ -40,7 +40,7 @@ namespace EngineSFML
             Va[5] = new Vertex(new Vector2f(1000, 250));
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.5.1 тест", Styles.Default)
+        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.6.0", Styles.Titlebar)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
@@ -91,8 +91,6 @@ namespace EngineSFML
 
         public void frameRedraw()
         {
-            //rw.Draw(sprite);
-
             RpmMeter.paint(rw);
             PowerMeter.paint(rw);
             TorqueMeter.paint(rw);
@@ -193,10 +191,6 @@ namespace EngineSFML
             IgnitionIndicator.update(Program.eng.ignition);
             SlowModeIndicator.update(Program.eng.slowMode);
             StarterIndicator.update(Program.eng.starterRotation);
-
-            //updateSprite();
-
-            
         }
 
         public void updatePicture()
@@ -208,29 +202,6 @@ namespace EngineSFML
                 Enabled = true
             };
             t2.Elapsed += this.updateShapes;
-        }
-
-        public void updateSprite()
-        {
-            if (Program.eng.Rpm == 0)
-            {
-                Thread.Sleep(100);
-            }
-            else
-            {
-                double wait = (1000 / (Program.eng.Rpm * 2));
-                Thread.Sleep((int)(wait));
-                if (spriteNum < 3)
-                {
-                    spriteNum++;
-                }
-                else
-                {
-                    spriteNum = 0;
-                }
-            }
-
-            sprite = pistonSprites[spriteNum];
         }
     }
 }
