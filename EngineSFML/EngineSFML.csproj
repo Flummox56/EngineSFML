@@ -24,9 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="231221632.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="arial.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

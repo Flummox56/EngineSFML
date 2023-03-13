@@ -9,9 +9,7 @@ namespace EngineSFML
     public class Picture
     {
         public static VideoMode vm = new VideoMode(1000, 500, 16);
-
-        int spriteNum = 0;
-        Text t = new Text("a", new Font("arial.ttf"), 30);
+        
         Piston p = new Piston();
 
         Indicator WoundUpIndicator = new Indicator(new Vector2f(562.5f, 187.5f), "Wound Up");
@@ -27,7 +25,6 @@ namespace EngineSFML
 
         Vertex[] Va = new Vertex[6];
         
-
         public Picture(uint maxFPS)
         {
             rw.SetFramerateLimit(maxFPS);
@@ -40,36 +37,11 @@ namespace EngineSFML
             Va[5] = new Vertex(new Vector2f(1000, 250));
         }
 
-        public RenderWindow rw = new RenderWindow(vm, "Целиндропляс 1.6.0", Styles.Titlebar)
+        public RenderWindow rw = new RenderWindow(vm, "Engine Simulation", Styles.Titlebar)
         {
             Position = new Vector2i(0, 0),
             Size = new Vector2u(1000, 500)
         };
-
-        Sprite sprite = new Sprite()
-        {
-            Scale = new Vector2f(200, 400),
-            Position = new Vector2f(50, 50)
-        };
-
-        public void makeSprites()
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                Vector2i[] PoseVectMas = {new Vector2i(80, 10), new Vector2i(359, 10), new Vector2i(637, 10), new Vector2i(915, 10)};
-                Vector2i[] SizeVectMas = {new Vector2i(200, 400), new Vector2i(200, 400), new Vector2i(200, 400), new Vector2i(200, 400)};
-
-                IntRect ir = new IntRect(PoseVectMas[i], SizeVectMas[i]);
-
-                Texture t = new Texture("231221632.png", ir);
-
-                t.Smooth = true;
-
-                Sprite sp = new Sprite(t);
-
-                pistonSprites.Add(sp);
-            }
-        }
 
         public void frameChange()
         {
@@ -177,9 +149,6 @@ namespace EngineSFML
                     tickCount2++;
                 }
             }
-
-            t.Position = new Vector2f(500, 400);
-            t.DisplayedString = "Rpm\n" + Program.eng.Rpm;
 
             RpmMeter.update(Program.eng.Rpm);
             PowerMeter.update(Program.eng.power);

@@ -86,7 +86,7 @@ namespace EngineSFML
                     {
                         if (Rpm < maxRpmPoint + 600)
                         {
-                            Rpm += 100 / slowСoefficient;
+                            Rpm += 50 / slowСoefficient;
                         }
                         else
                         {
@@ -97,7 +97,7 @@ namespace EngineSFML
                     {
                         if (Rpm > idleRpmPoint)
                         {
-                            Rpm -= 250 / slowСoefficient;
+                            Rpm -= 100 / slowСoefficient;
                         }
                         else
                         {
@@ -134,7 +134,7 @@ namespace EngineSFML
 
                 if (Rpm > 0)
                 {
-                    Rpm -= 250 / slowСoefficient;
+                    Rpm -= 125 / slowСoefficient;
                 }
                 else
                 {
