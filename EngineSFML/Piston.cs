@@ -16,9 +16,6 @@ namespace EngineSFML
 
         double t = 0, a = 0;
 
-        bool tactInput = true;
-        bool tactOutput = false;
-
         Vertex[] Cylinder = new Vertex[4];
 
         ConvexShape InletValve = new ConvexShape(6)
