@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SFML.Graphics;
+using System;
 
 namespace EngineSFML
 {
     class Program
     {
         public static Engine eng = new Engine(0, 7000, 1000);
-        public static Picture pic = new Picture(1000);
+        public static Picture pic = new Picture(100);
 
         public static Thread EngineThread = new Thread(eng.updateEngine) {IsBackground = true};
         public static Thread PictureThread = new Thread(pic.updatePicture) {IsBackground = true};

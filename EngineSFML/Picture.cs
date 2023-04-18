@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using SFML.System;
 using SFML.Graphics;
 using SFML.Window;
@@ -9,7 +10,10 @@ namespace EngineSFML
     public class Picture
     {
         public static VideoMode vm = new VideoMode(1000, 500, 16);
-        
+
+        static Stopwatch FpsStopWatch = new Stopwatch();
+        long ts = 0;
+
         Piston p = new Piston();
 
         Indicator WoundUpIndicator = new Indicator(new Vector2f(562.5f, 187.5f), "Wound Up");
@@ -21,9 +25,9 @@ namespace EngineSFML
         Meter PowerMeter = new Meter(new Vector2f(625, 375), 85, "Power", 200);
         Meter TorqueMeter = new Meter(new Vector2f(875, 375), 85, "Torque", 400);
 
-        List<Sprite> pistonSprites = new List<Sprite>();
+        Meter FPSMeter = new Meter(new Vector2f(60, 450), 40, "FPS", 300);
 
-        Vertex[] Va = new Vertex[6];
+        public Vertex[] Va = new Vertex[6];
         
         public Picture(uint maxFPS)
         {
@@ -47,6 +51,8 @@ namespace EngineSFML
         {
             while (rw.IsOpen)
             {
+                FpsStopWatch.Start();
+
                 rw.DispatchEvents();
 
                 frameRedraw();
@@ -58,6 +64,12 @@ namespace EngineSFML
 
                 rw.Display();
                 rw.Clear();
+
+                FpsStopWatch.Stop();
+
+                ts = FpsStopWatch.ElapsedMilliseconds;
+
+                FpsStopWatch.Reset();
             }
         }
 
@@ -66,6 +78,8 @@ namespace EngineSFML
             RpmMeter.paint(rw);
             PowerMeter.paint(rw);
             TorqueMeter.paint(rw);
+
+            FPSMeter.paint(rw);
 
             p.paint(rw);
 
@@ -153,6 +167,8 @@ namespace EngineSFML
             RpmMeter.update(Program.eng.Rpm);
             PowerMeter.update(Program.eng.power);
             TorqueMeter.update(Program.eng.torque);
+
+            FPSMeter.update(1000 / ts);
 
             p.update(Program.eng.Rpm);
 
